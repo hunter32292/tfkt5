@@ -1,0 +1,59 @@
+﻿@model Mélodie.Models.Users
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Users</h4>
+	<hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.username)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.username)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.email)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.email)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.password_salt)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.password_salt)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.password_hash)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.password_hash)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.role_id)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.role_id)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.ID }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>
