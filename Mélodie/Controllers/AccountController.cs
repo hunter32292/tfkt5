@@ -45,6 +45,11 @@ namespace Mélodie.Controllers
         {
             if (ModelState.IsValid)
             {
+                if (model.UserName.Contains("@uwec.edu"))
+                {
+                    //Take the user to their account modifying page.
+                    
+                }
                 var user = await UserManager.FindAsync(model.UserName, model.Password);
                 if (user != null)
                 {
@@ -78,12 +83,16 @@ namespace Mélodie.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser() { UserName = model.UserName };
+                var user = new ApplicationUser() { UserName = model.UserName, Email = model.Email };
                 var result = await UserManager.CreateAsync(user, model.Password);
-                if (result.Succeeded)
+                if (result.Succeeded && model.Email.Contains("@uwec.edu"))
                 {
                     await SignInAsync(user, isPersistent: false);
                     return RedirectToAction("Index", "Home");
+                }
+                else if (!model.Email.Contains("@uwec.edu"))
+                {
+                    ModelState.AddModelError("","Your email must have a uwec.edu domain.");
                 }
                 else
                 {
