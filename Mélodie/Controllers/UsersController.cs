@@ -8,6 +8,9 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using Mélodie.Models;
+using System.Collections;
+using System.Text.RegularExpressions;
+using Excel;
 
 namespace Mélodie.Controllers
 {
@@ -42,12 +45,55 @@ namespace Mélodie.Controllers
             return View();
         }
 
+        //dylan added this. not really sure if I did it right
+        public async Task<ActionResult> Import()
+        {
+            ArrayList list = new ArrayList();
+            string regex = "^[a-z,A-Z,0-9]*@uwec.edu$";
+            Regex r = new Regex(regex);
+
+            foreach (var worksheet in Workbook.Worksheets(@"H:\login.xlsx"))
+            {
+                foreach (var row in worksheet.Rows)
+                {
+                    foreach (var cell in row.Cells)
+                    {
+                        if (cell != null)
+                        {
+                            Match m = r.Match(cell.Text);
+                            if (m.Success)
+                            {
+                                list.Add(cell.Text);
+                            }
+                        }
+
+                    }
+                }
+            }
+
+
+
+            for (int x = 0; x < list.Count; x++)
+            {
+                Users user = new Users();
+                user.email = (String)list[x];
+                user.role_id = 1;
+                db.Users.Add(user);
+
+            }
+
+            //stuff to make the computer stop yelling at me
+            await db.SaveChangesAsync();
+            return RedirectToAction("Index");
+        }
+
+
         // POST: /Users/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create([Bind(Include="ID,username,email,password_salt,password_hash,role_id")] Users users)
+        public async Task<ActionResult> Create([Bind(Include = "ID,username,email,password_salt,password_hash,role_id")] Users users)
         {
             if (ModelState.IsValid)
             {
@@ -79,7 +125,7 @@ namespace Mélodie.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit([Bind(Include="ID,username,email,password_salt,password_hash,role_id")] Users users)
+        public async Task<ActionResult> Edit([Bind(Include = "ID,username,email,password_salt,password_hash,role_id")] Users users)
         {
             if (ModelState.IsValid)
             {
