@@ -49,6 +49,7 @@ namespace Mélodie.Controllers
         // "Good work" - John
         public async Task<ActionResult> Import()
         {
+            List<String> list = new List<String>();
          
 					  ArrayList newUsers = new ArrayList();
 						// Filter Regex
