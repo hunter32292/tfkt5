@@ -49,9 +49,9 @@ namespace Mélodie.Controllers
         // "Good work" - John
         public async Task<ActionResult> Import()
         {
-            List<String> list = new List<String>();
+            
          
-					  ArrayList newUsers = new ArrayList();
+		    ArrayList newUsers = new ArrayList();
 						// Filter Regex
             string regex = "^[a-z,A-Z,0-9]*@uwec.edu$";
             Regex r = new Regex(regex);
@@ -71,7 +71,7 @@ namespace Mélodie.Controllers
                             Match m = r.Match(cell.Text);
                             if (m.Success)
                             {
-                                list.Add(cell.Text);
+                                newUsers.Add(cell.Text);
                             }
                         }
 
@@ -81,10 +81,10 @@ namespace Mélodie.Controllers
 
 
 
-            for (int x = 0; x < list.Count; x++)
+            for (int x = 0; x < newUsers.Count; x++)
             {
                 Users user = new Users();
-                user.email = (String)list[x];
+                user.email = (String)newUsers[x];
                 user.role_id = 1;
                 db.Users.Add(user);
 
