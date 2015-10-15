@@ -45,13 +45,20 @@ namespace Mélodie.Controllers
             return View();
         }
 
-        //dylan added this. not really sure if I did it right
+        // Dylan added this
+        // "Good work" - John
         public async Task<ActionResult> Import()
         {
-            ArrayList list = new ArrayList();
+         
+					  ArrayList newUsers = new ArrayList();
+						// Filter Regex
             string regex = "^[a-z,A-Z,0-9]*@uwec.edu$";
             Regex r = new Regex(regex);
+						// Parse excel document
+						
 
+						// Base controller code and view code off of:
+						// https://cmatskas.com/upload-files-in-asp-net-mvc-with-javascript-and-c/
             foreach (var worksheet in Workbook.Worksheets(@"H:\login.xlsx"))
             {
                 foreach (var row in worksheet.Rows)
