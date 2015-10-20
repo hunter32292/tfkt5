@@ -116,7 +116,6 @@ H:\Documents\cs485\tfkt5\Mélodie\bin\Mélodie.pdb
 H:\Documents\cs485\tfkt5\Mélodie\bin\Antlr3.Runtime.dll
 H:\Documents\cs485\tfkt5\Mélodie\bin\EntityFramework.dll
 H:\Documents\cs485\tfkt5\Mélodie\bin\EntityFramework.SqlServer.dll
-H:\Documents\cs485\tfkt5\Mélodie\bin\Excel.dll
 H:\Documents\cs485\tfkt5\Mélodie\bin\Microsoft.AspNet.Identity.Core.dll
 H:\Documents\cs485\tfkt5\Mélodie\bin\Microsoft.AspNet.Identity.EntityFramework.dll
 H:\Documents\cs485\tfkt5\Mélodie\bin\Microsoft.AspNet.Identity.Owin.dll
