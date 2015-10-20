@@ -11,6 +11,7 @@ using Mélodie.Models;
 using System.Collections;
 using System.Text.RegularExpressions;
 using Excel;
+using System.IO;
 
 namespace Mélodie.Controllers
 {
@@ -47,17 +48,43 @@ namespace Mélodie.Controllers
 
         // Dylan added this
         // "Good work" - John
-        public async Task<ActionResult> Import()
+        [AcceptVerbs(HttpVerbs.Post)]
+        public async Task<ActionResult> Import(string id)
         {
-            
-         
 		    ArrayList newUsers = new ArrayList();
 						// Filter Regex
             string regex = "^[a-z,A-Z,0-9]*@uwec.edu$";
             Regex r = new Regex(regex);
 						// Parse excel document
-						
-
+            string file_name_out = "default";
+            try
+            {
+                foreach (string file in Request.Files)
+                {
+                    var fileContent = Request.Files[file];
+                    if (fileContent != null && fileContent.ContentLength > 0)
+                    {
+                        // get a stream
+                        var stream = fileContent.InputStream;
+                        // and optionally write the file to disk
+                        var fileName = Path.GetFileName(file);
+                        var path = Path.Combine(Server.MapPath("~/App_Data/"), fileName);
+                        file_name_out = fileName.ToString();
+                        using (var fileStream = System.IO.File.Create(path))
+                        {
+                            stream.CopyTo(fileStream);
+                        }
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                return Json("Upload failed", JsonRequestBehavior.AllowGet);
+            }
+            string returnValue = "File uploaded successfully " + file_name_out;
+            return Json(returnValue, JsonRequestBehavior.AllowGet);
+            /*
 						// Base controller code and view code off of:
 						// https://cmatskas.com/upload-files-in-asp-net-mvc-with-javascript-and-c/
             foreach (var worksheet in Workbook.Worksheets(@"H:\login.xlsx"))
@@ -93,6 +120,7 @@ namespace Mélodie.Controllers
             //stuff to make the computer stop yelling at me
             await db.SaveChangesAsync();
             return RedirectToAction("Index");
+            */
         }
 
 
