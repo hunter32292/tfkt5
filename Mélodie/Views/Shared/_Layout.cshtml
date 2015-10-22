@@ -10,15 +10,16 @@
 
 </head>
 <body>
-    <nav>
-        <div class="nav-wrapper yellow accent-1">
-            <center><img src="~/image/melodie.gif" class="center-align" /></center>
-        </div>
-    </nav>
     <header>
 
-        <div class="container"><!-- responsive button for mobile view-->
-            <a href="#" data-activates="nav-mobile" class="button-collapse top-nav waves-effect waves-light circle hide-on-large-only"><i class="mdi-navigation-menu large"></i></a>
+        <nav>
+            <div class="nav-wrapper yellow accent-1">
+                <center><img src="~/image/melodie.gif" class="center-align" /></center>
+            </div>
+        </nav>
+        <div class="container">
+            <!-- responsive button for mobile view-->
+            <a href="#" data-activates="nav-mobile" class="button-collapse top-nav waves-effect waves-light circle hide-on-large-only"><i class="mdi-navigation-menu medium"></i></a>
         </div>
 
         <ul id="nav-mobile" class="side-nav fixed indigo">
@@ -26,52 +27,57 @@
 
                 @Html.ActionLink("Mélodie", "Index", "Home", null, new { @class = "black-text  brand-logo", @id = "logo-container" })
             </li>
-            <li class="bold">@Html.ActionLink("Home", "Index", "Home", null, new { @class = "black-text waves-effect waves-indigo" })</li>
             <li class="bold">@Html.ActionLink("About", "About", "Home", null, new { @class = "black-text waves-effect waves-indigo" })</li>
             <li class="bold">@Html.ActionLink("Contact", "Contact", "Home", null, new { @class = "black-text waves-effect waves-indigo" })</li>
             <li class="bold">@Html.ActionLink("Students", "Index", "Users", null, new { @class = "black-text waves-effect waves-indigo" })</li>
             <!-- instantiates the Register and Login links and changes them to "Account" (which goes to a account management page) and "Log off" after logging in - Jordan -->
-             @Html.Partial("_LoginPartial")
+            @Html.Partial("_LoginPartial")
         </ul>
-
     </header>
 
 
 
-   <main>
-       <div class="section">
-           <div class="container">
-               @RenderBody()
-           </div>
-       </div>
-    </main>
-    <footer class="page-footer indigo lighten-4">
+    <main>
         <div class="container">
             <div class="row">
-                <div class="col l6 s12">
-                    <h5 class="black-text">Mélodie Maker</h5>
-                    <p class="black-text text-lighten-4">A simple and elegant web application built for the University of Wisconsin Eau Claire - Music Department. Mélodie Maker is the future for prefessors who need to teach students chord structure and pitch training.</p>
-                </div>
-                <div class="col l4 offset-l2 s12">
-                    <h5 class="black-text">Links</h5>
-                    <ul>
-                        <li><a class="black-text text-lighten-3" href="https://github.com/hunter32292/tfkt5">Mélodie Maker Repository</a></li>
-                        <li><a class="black-text text-lighten-3" href="#!">Link 2</a></li>
-                        <li><a class="black-text text-lighten-3" href="#!">Link 3</a></li>
-                        <li><a class="black-text text-lighten-3" href="#!">Link 4</a></li>
-                    </ul>
-                </div>
+                @RenderBody()
             </div>
         </div>
-        <div class="footer-copyright indigo lighten-3">
-            <div class="container">
-                <p class="black-text">&copy; @DateTime.Now.Year - Mélodie Maker</p>
-            </div>
-        </div>
-    </footer>
+    </main>
+    <div class="container">
+        <div class="row">
+            <footer class="page-footer indigo lighten-4">
+                <div class="container">
+                    <div class="row">
+                        <div class="col l6 s12">
+                            <h5 class="black-text">Mélodie Maker</h5>
+                            <p class="black-text text-lighten-4">A simple and elegant web application built for the University of Wisconsin Eau Claire - Music Department. Mélodie Maker is the future for prefessors who need to teach students chord structure and pitch training.</p>
+                        </div>
+                        <div class="col l4 offset-l2 s12">
+                            <h5 class="black-text">Links</h5>
+                            <ul>
+                                <li><a class="black-text text-lighten-3" href="https://github.com/hunter32292/tfkt5">Mélodie Maker Repository</a></li>
+                                <li><a class="black-text text-lighten-3" href="#!">Link 2</a></li>
+                                <li><a class="black-text text-lighten-3" href="#!">Link 3</a></li>
+                                <li><a class="black-text text-lighten-3" href="#!">Link 4</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                        <div class="footer-copyright indigo lighten-3">
+                            <div class="container">
+                                <p class="black-text">&copy; @DateTime.Now.Year - Mélodie Maker</p>
+                            </div>
+                        </div>
 
-        @Scripts.Render("~/bundles/jquery")
-        @Scripts.Render("~/bundles/materialize")
-        @RenderSection("scripts", required: false)
+            </footer>
+        </div>
+    </div>
+
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/materialize")
+    @RenderSection("scripts", required: false)
 </body>
 </html>
