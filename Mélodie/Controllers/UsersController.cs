@@ -48,79 +48,60 @@ namespace Mélodie.Controllers
 
         // Dylan added this
         // "Good work" - John
-        [AcceptVerbs(HttpVerbs.Post)]
-        public async Task<ActionResult> Import(string id)
+        [HttpPost]
+        public ActionResult Import()
         {
+            
 		    ArrayList newUsers = new ArrayList();
-						// Filter Regex
+            //newUsers.Add("hello");
+		    // Filter Regex
             string regex = "^[a-z,A-Z,0-9]*@uwec.edu$";
             Regex r = new Regex(regex);
-						// Parse excel document
-            string file_name_out = "default";
-            try
+            if (Request.Files.Count > 0)
             {
-                foreach (string file in Request.Files)
+                var file = Request.Files[0];
+                if (file != null && file.ContentLength > 0)
                 {
-                    var fileContent = Request.Files[file];
-                    if (fileContent != null && fileContent.ContentLength > 0)
+                    var fileName = Path.GetFileName(file.FileName);
+
+                    var path = Path.Combine("H:\\tfkt5\\Mélodie\\excel\\", fileName);//H:\tfkt5\Mélodie\excel\
+                    file.SaveAs(path);
+                    foreach (var worksheet in Workbook.Worksheets("H:\\tfkt5\\Mélodie\\excel\\" + fileName))
                     {
-                        // get a stream
-                        var stream = fileContent.InputStream;
-                        // and optionally write the file to disk
-                        var fileName = Path.GetFileName(file);
-                        var path = Path.Combine(Server.MapPath("~/App_Data/"), fileName);
-                        file_name_out = fileName.ToString();
-                        using (var fileStream = System.IO.File.Create(path))
+                        foreach (var row in worksheet.Rows)
                         {
-                            stream.CopyTo(fileStream);
-                        }
-                    }
-                }
-            }
-            catch (Exception)
-            {
-                Response.StatusCode = (int)HttpStatusCode.BadRequest;
-                return Json("Upload failed", JsonRequestBehavior.AllowGet);
-            }
-            string returnValue = "File uploaded successfully " + file_name_out;
-            return Json(returnValue, JsonRequestBehavior.AllowGet);
-            /*
-						// Base controller code and view code off of:
-						// https://cmatskas.com/upload-files-in-asp-net-mvc-with-javascript-and-c/
-            foreach (var worksheet in Workbook.Worksheets(@"H:\login.xlsx"))
-            {
-                foreach (var row in worksheet.Rows)
-                {
-                    foreach (var cell in row.Cells)
-                    {
-                        if (cell != null)
-                        {
-                            Match m = r.Match(cell.Text);
-                            if (m.Success)
+                            foreach (var cell in row.Cells)
                             {
-                                newUsers.Add(cell.Text);
+                                if (cell != null)
+                                {
+                                    Match m = r.Match(cell.Text);
+                                    if (m.Success)
+                                    {
+                                        newUsers.Add(cell.Text);
+                                    }
+                                }
+
                             }
                         }
-
                     }
+                    
                 }
             }
-
-
-
+            
             for (int x = 0; x < newUsers.Count; x++)
             {
                 Users user = new Users();
                 user.email = (String)newUsers[x];
                 user.role_id = 1;
                 db.Users.Add(user);
+                db.SaveChanges();
 
             }
 
             //stuff to make the computer stop yelling at me
-            await db.SaveChangesAsync();
+            
             return RedirectToAction("Index");
-            */
+            
         }
 
 
