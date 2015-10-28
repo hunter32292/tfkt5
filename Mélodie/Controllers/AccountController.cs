@@ -53,6 +53,7 @@ namespace Mélodie.Controllers
                 var user = await UserManager.FindAsync(model.UserName, model.Password);
                 if (user != null)
                 {
+                    
                     await SignInAsync(user, model.RememberMe);
                     return RedirectToLocal(returnUrl);
                 }
@@ -83,7 +84,7 @@ namespace Mélodie.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser() { UserName = model.UserName, Email = model.Email };
+                var user = new ApplicationUser() { UserName = model.UserName, Email = model.Email, Role_Id = model.role_id };
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded && model.Email.Contains("@uwec.edu"))
                 {
