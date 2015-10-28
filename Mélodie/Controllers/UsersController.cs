@@ -5,10 +5,12 @@ using System.Data.Entity;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Net;
+using System.Net.Mail;
 using System.Web;
 using System.Web.Mvc;
 using Mélodie.Models;
 using System.Collections;
+using System.Text;
 using System.Text.RegularExpressions;
 using Excel;
 using System.IO;
@@ -187,5 +189,75 @@ namespace Mélodie.Controllers
             }
             base.Dispose(disposing);
         }
+
+
+        private void sendMailToRecipient(Users user)
+        {
+            // create the message that is to be mailed
+            MailMessage mail = new MailMessage();
+
+            // TODO - add proper address for email here
+            mail.From = new MailAddress("sender email address here");
+            mail.To.Add(new MailAddress(user.email));
+
+            mail.Subject = "Thank you for your registration to Mèlodie Maker!";
+
+            // set to true for now 
+            Boolean isGenerated = true;
+            // generate the body of the email
+            string body = GenerateEmailBody(isGenerated, user);
+
+            mail.Body = body;
+
+            SmtpClient smtpClient = new SmtpClient();
+            smtpClient.Credentials = new System.Net.NetworkCredential("sender email address here", "sender email password here");
+            smtpClient.Send(mail);
+
+        }
+
+        private string GenerateEmailBody(Boolean isGenerated, Users user)
+        {
+            string message = "";
+            if (isGenerated)
+            {
+                message =
+                    "Hi, " + user.username + "!" + Environment.NewLine +
+                    Environment.NewLine +
+                    "You have been registered for Mèlodie Maker!  Please use the following to login:" + Environment.NewLine +
+                    "Your new username is " + user.username + "." + Environment.NewLine +
+                    "Your new password is " + GenerateRandomPassword(8) + "." + Environment.NewLine +
+                    "You can change your password in Settings." + Environment.NewLine +
+                    Environment.NewLine +
+                    "This is a no-reply email.  For general inquiries, please send an email to " + "our email here" + ".";
+
+            }
+            else
+            {
+                message =
+                    "Hi, " + user.username + "!" + Environment.NewLine +
+                    Environment.NewLine +
+                    "Your registration for Mèlodie Maker has been succesful.  Thank you!" + Environment.NewLine +
+                    Environment.NewLine +
+                    "This is a no-reply email.  For general inquiries, please send an email to " + "our email here" + ".";
+            }
+            return message;
+        }
+
+        private string GenerateRandomPassword(int length)
+        {
+            const string valid = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
+            StringBuilder password = new StringBuilder();
+            Random rnd = new Random();
+
+            while (0 < length)
+            {
+                password.Append(valid[rnd.Next(valid.Length)]);
+                length--;
+            }
+
+            return password.ToString();
+        }​
+
+
     }
 }
