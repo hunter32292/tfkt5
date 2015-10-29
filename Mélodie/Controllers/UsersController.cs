@@ -256,8 +256,6 @@ namespace Mélodie.Controllers
             }
 
             return password.ToString();
-        }​
-
-
+        }
     }
 }
