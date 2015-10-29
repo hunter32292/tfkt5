@@ -5,7 +5,7 @@ using System.Web;
 
 namespace Mélodie.Models
 {
-    public class Role
+    public class Roles
     {
         public int ID { get; set; }
         public string type { get; set; }

@@ -15,13 +15,13 @@ namespace Mélodie.Controllers
     {
         private MélodieContext db = new MélodieContext();
 
-        // GET: /Questions/
+        // GET: Questions
         public async Task<ActionResult> Index()
         {
             return View(await db.Questions.ToListAsync());
         }
 
-        // GET: /Questions/Details/5
+        // GET: Questions/Details/5
         public async Task<ActionResult> Details(int? id)
         {
             if (id == null)
@@ -36,19 +36,18 @@ namespace Mélodie.Controllers
             return View(questions);
         }
 
-        // GET: /Questions/Create
+        // GET: Questions/Create
         public ActionResult Create()
         {
             return View();
         }
 
-        // POST: /Questions/Create
+        // POST: Questions/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        // TODO: Need to add the lesson_id to the create functionality
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create([Bind(Include="ID,text,points")] Questions questions)
+        public async Task<ActionResult> Create([Bind(Include = "ID,lesson_id,text,points")] Questions questions)
         {
             if (ModelState.IsValid)
             {
@@ -60,7 +59,7 @@ namespace Mélodie.Controllers
             return View(questions);
         }
 
-        // GET: /Questions/Edit/5
+        // GET: Questions/Edit/5
         public async Task<ActionResult> Edit(int? id)
         {
             if (id == null)
@@ -75,13 +74,12 @@ namespace Mélodie.Controllers
             return View(questions);
         }
 
-        // POST: /Questions/Edit/5
+        // POST: Questions/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        // TODO: Need to add the lesson_id to the edit functionality
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit([Bind(Include="ID,text,points")] Questions questions)
+        public async Task<ActionResult> Edit([Bind(Include = "ID,lesson_id,text,points")] Questions questions)
         {
             if (ModelState.IsValid)
             {
@@ -92,7 +90,7 @@ namespace Mélodie.Controllers
             return View(questions);
         }
 
-        // GET: /Questions/Delete/5
+        // GET: Questions/Delete/5
         public async Task<ActionResult> Delete(int? id)
         {
             if (id == null)
@@ -107,7 +105,7 @@ namespace Mélodie.Controllers
             return View(questions);
         }
 
-        // POST: /Questions/Delete/5
+        // POST: Questions/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> DeleteConfirmed(int id)

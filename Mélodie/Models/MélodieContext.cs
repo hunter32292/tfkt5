@@ -20,9 +20,9 @@ namespace Mélodie.Models
         }
 
         public System.Data.Entity.DbSet<Mélodie.Models.Users> Users { get; set; }
-        public System.Data.Entity.DbSet<Mélodie.Models.Course> Course { get; set; }
-        public System.Data.Entity.DbSet<Mélodie.Models.Lesson> Lesson { get; set; }
-        public System.Data.Entity.DbSet<Mélodie.Models.Role> Role { get; set; }
+        public System.Data.Entity.DbSet<Mélodie.Models.Courses> Course { get; set; }
+        public System.Data.Entity.DbSet<Mélodie.Models.Lessons> Lesson { get; set; }
+        public System.Data.Entity.DbSet<Mélodie.Models.Roles> Role { get; set; }
         public System.Data.Entity.DbSet<Mélodie.Models.Questions> Questions { get; set; }
     
     }
