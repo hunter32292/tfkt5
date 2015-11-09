@@ -2,12 +2,11 @@
 @using Mélodie.Controllers;
 @if (Request.IsAuthenticated)
 {
-    
-    
-    /*if ()
-    {
+    //var role = Request.;
+    //Session["Role"] = role;
+
 <li class="bold">@Html.ActionLink("Students", "Index", "Users", null, new { @class = "black-text waves-effect waves-indigo" })</li>
-}*/
+
 
     using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
     {
