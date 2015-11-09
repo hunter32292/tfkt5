@@ -53,7 +53,7 @@ namespace Mélodie.Controllers
                 var user = await UserManager.FindAsync(model.UserName, model.Password);
                 if (user != null)
                 {
-                    
+                    Session["Role"] = user.Role_Id;
                     await SignInAsync(user, model.RememberMe);
                     return RedirectToLocal(returnUrl);
                 }
