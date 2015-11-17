@@ -4,13 +4,6 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Mélodie.Models
 {
-    public class ExternalLoginConfirmationViewModel
-    {
-        [Required]
-        [Display(Name = "User name")]
-        public string UserName { get; set; }
-    }
-
     public class ManageUserViewModel
     {
         [Required]
@@ -132,8 +125,6 @@ namespace Mélodie.Models
         }
 
         public string UserName { get; set; }
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
         public List<SelectRoleEditorViewModel> Roles { get; set; }
     }
 

@@ -123,6 +123,33 @@ namespace Mélodie.Controllers
             return RedirectToAction("Manage", new { Message = message });
         }
 
+        [Authorize(Roles = "Instructor")]
+        public ActionResult Edit(string id, ManageMessageId? Message = null)
+        {
+            var Db = new ApplicationDbContext();
+            var user = Db.Users.First(u => u.UserName == id);
+            var model = new EditUserViewModel(user);
+            ViewBag.MessageId = Message;
+            return View(model);
+        }
+        [HttpPost]
+        [Authorize(Roles = "Instructor")]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> Edit(EditUserViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var Db = new ApplicationDbContext();
+                var user = Db.Users.First(u => u.UserName == model.UserName);
+                // Update the user data:
+                user.Email = model.Email;
+                Db.Entry(user).State = System.Data.Entity.EntityState.Modified;
+                await Db.SaveChangesAsync();
+                return RedirectToAction("Index");
+            }
+            // If we got this far, something failed, redisplay form
+            return View(model);
+        }
         //
         // GET: /Account/Manage
         public ActionResult Manage(ManageMessageId? message)
@@ -136,6 +163,32 @@ namespace Mélodie.Controllers
             ViewBag.HasLocalPassword = HasPassword();
             ViewBag.ReturnUrl = Url.Action("Manage");
             return View();
+        }
+
+        [Authorize(Roles = "Instructor")]
+        public ActionResult Delete(string id = null)
+        {
+            var Db = new ApplicationDbContext();
+            var user = Db.Users.First(u => u.UserName == id);
+            var model = new EditUserViewModel(user);
+            if (user == null)
+            {
+                return HttpNotFound();
+            }
+            return View(model);
+        }
+
+
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Instructor")]
+        public ActionResult DeleteConfirmed(string id)
+        {
+            var Db = new ApplicationDbContext();
+            var user = Db.Users.First(u => u.UserName == id);
+            Db.Users.Remove(user);
+            Db.SaveChanges();
+            return RedirectToAction("Index");
         }
 
         //
@@ -200,32 +253,7 @@ namespace Mélodie.Controllers
             return new ChallengeResult(provider, Url.Action("ExternalLoginCallback", "Account", new { ReturnUrl = returnUrl }));
         }
 
-        //
-        // GET: /Account/ExternalLoginCallback
-        [AllowAnonymous]
-        public async Task<ActionResult> ExternalLoginCallback(string returnUrl)
-        {
-            var loginInfo = await AuthenticationManager.GetExternalLoginInfoAsync();
-            if (loginInfo == null)
-            {
-                return RedirectToAction("Login");
-            }
-
-            // Sign in the user with this external login provider if the user already has a login
-            var user = await UserManager.FindAsync(loginInfo.Login);
-            if (user != null)
-            {
-                await SignInAsync(user, isPersistent: false);
-                return RedirectToLocal(returnUrl);
-            }
-            else
-            {
-                // If the user does not have an account, then prompt the user to create an account
-                ViewBag.ReturnUrl = returnUrl;
-                ViewBag.LoginProvider = loginInfo.Login.LoginProvider;
-                return View("ExternalLoginConfirmation", new ExternalLoginConfirmationViewModel { UserName = loginInfo.DefaultUserName });
-            }
-        }
+       
 
         //
         // POST: /Account/LinkLogin
@@ -254,41 +282,17 @@ namespace Mélodie.Controllers
             return RedirectToAction("Manage", new { Message = ManageMessageId.Error });
         }
 
-        //
-        // POST: /Account/ExternalLoginConfirmation
-        [HttpPost]
-        [AllowAnonymous]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult> ExternalLoginConfirmation(ExternalLoginConfirmationViewModel model, string returnUrl)
+        [Authorize(Roles = "Instructor")]
+        public ActionResult Index()
         {
-            if (User.Identity.IsAuthenticated)
+            var Db = new ApplicationDbContext();
+            var users = Db.Users;
+            var model = new List<EditUserViewModel>();
+            foreach (var user in users)
             {
-                return RedirectToAction("Manage");
+                var u = new EditUserViewModel(user);
+                model.Add(u);
             }
-
-            if (ModelState.IsValid)
-            {
-                // Get the information about the user from the external login provider
-                var info = await AuthenticationManager.GetExternalLoginInfoAsync();
-                if (info == null)
-                {
-                    return View("ExternalLoginFailure");
-                }
-                var user = new ApplicationUser() { UserName = model.UserName };
-                var result = await UserManager.CreateAsync(user);
-                if (result.Succeeded)
-                {
-                    result = await UserManager.AddLoginAsync(user.Id, info.Login);
-                    if (result.Succeeded)
-                    {
-                        await SignInAsync(user, isPersistent: false);
-                        return RedirectToLocal(returnUrl);
-                    }
-                }
-                AddErrors(result);
-            }
-
-            ViewBag.ReturnUrl = returnUrl;
             return View(model);
         }
 
@@ -383,6 +387,39 @@ namespace Mélodie.Controllers
             {
                 return RedirectToAction("Index", "Home");
             }
+        }
+
+        [Authorize(Roles = "Instructor")]
+        public ActionResult UserRoles(string id)
+        {
+            var Db = new ApplicationDbContext();
+            var user = Db.Users.First(u => u.UserName == id);
+            var model = new SelectUserRolesViewModel(user);
+            return View(model);
+        }
+
+
+        [HttpPost]
+        [Authorize(Roles = "Instructor")]
+        [ValidateAntiForgeryToken]
+        public ActionResult UserRoles(SelectUserRolesViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var idManager = new IdentityManager();
+                var Db = new ApplicationDbContext();
+                var user = Db.Users.First(u => u.UserName == model.UserName);
+                idManager.ClearUserRoles(user.Id);
+                foreach (var role in model.Roles)
+                {
+                    if (role.Selected)
+                    {
+                        idManager.AddUserToRole(user.Id, role.RoleName);
+                    }
+                }
+                return RedirectToAction("index");
+            }
+            return View();
         }
 
         private class ChallengeResult : HttpUnauthorizedResult
