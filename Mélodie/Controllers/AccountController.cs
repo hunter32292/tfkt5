@@ -53,7 +53,6 @@ namespace Mélodie.Controllers
                 var user = await UserManager.FindAsync(model.UserName, model.Password);
                 if (user != null)
                 {
-                    Session["Role"] = user.Role_Id;
                     await SignInAsync(user, model.RememberMe);
                     return RedirectToLocal(returnUrl);
                 }
@@ -69,7 +68,7 @@ namespace Mélodie.Controllers
 
         //
         // GET: /Account/Register
-        [AllowAnonymous]
+        [Authorize(Roles = "Instructor")]
         public ActionResult Register()
         {
             return View();
@@ -78,13 +77,13 @@ namespace Mélodie.Controllers
         //
         // POST: /Account/Register
         [HttpPost]
-        [AllowAnonymous]
+        [Authorize(Roles = "Instructor")]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Register(RegisterViewModel model)
         {
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser() { UserName = model.UserName, Email = model.Email, Role_Id = model.role_id };
+                var user = new ApplicationUser() { UserName = model.UserName, Email = model.Email};
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded && model.Email.Contains("@uwec.edu"))
                 {
