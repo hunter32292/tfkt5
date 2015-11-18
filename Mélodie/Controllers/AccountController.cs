@@ -68,7 +68,8 @@ namespace Mélodie.Controllers
 
         //
         // GET: /Account/Register
-        [Authorize(Roles = "Instructor")]
+        //[Authorize(Roles = "Instructor")]
+        [AllowAnonymous]
         public ActionResult Register()
         {
             return View();
@@ -77,7 +78,8 @@ namespace Mélodie.Controllers
         //
         // POST: /Account/Register
         [HttpPost]
-        [Authorize(Roles = "Instructor")]
+        //[Authorize(Roles = "Instructor")]
+        [AllowAnonymous]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Register(RegisterViewModel model)
         {
