@@ -30,12 +30,12 @@ namespace Mélodie.Models
             }
 
             // Keep this:
-            modelBuilder.Entity<IdentityUser>().ToTable("AspNetUsers");
+            modelBuilder.Entity<IdentityUser>().ToTable("Users");
 
             // Change TUser to ApplicationUser everywhere else - 
             // IdentityUser and ApplicationUser essentially 'share' the AspNetUsers Table in the database:
             EntityTypeConfiguration<ApplicationUser> table =
-                modelBuilder.Entity<ApplicationUser>().ToTable("AspNetUsers");
+                modelBuilder.Entity<ApplicationUser>().ToTable("Users");
 
             table.Property((ApplicationUser u) => u.UserName).IsRequired();
 
@@ -61,12 +61,12 @@ namespace Mélodie.Models
             table1.HasRequired<IdentityUser>((IdentityUserClaim u) => u.User);
 
             // Add this, so that IdentityRole can share a table with ApplicationRole:
-            modelBuilder.Entity<IdentityRole>().ToTable("AspNetRoles");
-            modelBuilder.Entity<ApplicationRole>().ToTable("AspNetRoles");
+            modelBuilder.Entity<IdentityRole>().ToTable("Roles");
+            modelBuilder.Entity<ApplicationRole>().ToTable("Roles");
 
             // Change these from IdentityRole to ApplicationRole:
             EntityTypeConfiguration<ApplicationRole> entityTypeConfiguration1 =
-                modelBuilder.Entity<ApplicationRole>().ToTable("AspNetRoles");
+                modelBuilder.Entity<ApplicationRole>().ToTable("Roles");
 
             entityTypeConfiguration1.Property((ApplicationRole r) => r.Name).IsRequired();
         }

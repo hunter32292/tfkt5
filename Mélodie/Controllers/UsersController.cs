@@ -118,7 +118,7 @@ namespace Mélodie.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create([Bind(Include = "ID,username,email,password_salt,password_hash,role_id")] Users users)
+        public async Task<ActionResult> Create([Bind(Include = "ID,username,email,role_id")] Users users)
         {
             if (ModelState.IsValid)
             {

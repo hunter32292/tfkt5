@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNet.Identity.EntityFramework;
+using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
@@ -18,7 +19,6 @@ namespace Mélodie.Models
         public MélodieContext() : base("name=MélodieContext")
         {
         }
-
         public System.Data.Entity.DbSet<Mélodie.Models.Users> Users { get; set; }
         public System.Data.Entity.DbSet<Mélodie.Models.Courses> Course { get; set; }
         public System.Data.Entity.DbSet<Mélodie.Models.Lessons> Lesson { get; set; }
