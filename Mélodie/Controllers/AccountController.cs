@@ -88,8 +88,8 @@ namespace Mélodie.Controllers
             {
                 var user = new ApplicationUser() { UserName = model.UserName, Email = model.Email };
                 var result = await UserManager.CreateAsync(user, model.Password);
-                var role = new IdentityManager();
-                role.AddUserToRole(user.Id, model.role_id);
+                //var role = new IdentityManager();
+                //role.AddUserToRole(user.Id, model.role_id);
                 if (result.Succeeded && model.Email.Contains("@uwec.edu"))
                 {
                     await SignInAsync(user, isPersistent: false);
