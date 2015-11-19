@@ -95,6 +95,12 @@ namespace Mélodie.Controllers
                 Users user = new Users();
                 user.email = (String)newUsers[x];
                 user.role_id = 1;
+                // generate a random password for the user
+                string password = GenerateRandomPassword(8);
+                user.password_hash = password;
+                user.password_salt = password;
+                // notify the user that an account has been created in their name
+                sendMailToRecipient(user, password);
                 db.Users.Add(user);
                 db.SaveChanges();
 
@@ -190,56 +196,50 @@ namespace Mélodie.Controllers
             base.Dispose(disposing);
         }
 
-
-        private void sendMailToRecipient(Users user)
+        // Sender email is hard coded in for now
+        //  address:    tfkt5melodiemaker@gmail.com
+        //  password:   pieceofcake
+        private void sendMailToRecipient(Users user, string password)
         {
             // create the message that is to be mailed
             MailMessage mail = new MailMessage();
 
             // TODO - add proper address for email here
-            mail.From = new MailAddress("sender email address here");
+            mail.From = new MailAddress("tfkt5melodiemaker@gmail.com");
             mail.To.Add(new MailAddress(user.email));
 
-            mail.Subject = "Thank you for your registration to Mèlodie Maker!";
+            mail.Subject = "You have been registered for Mèlodie Maker!";
 
-            // set to true for now 
-            Boolean isGenerated = true;
             // generate the body of the email
-            string body = GenerateEmailBody(isGenerated, user);
+            string body = GenerateEmailBody(password, user);
 
             mail.Body = body;
 
-            SmtpClient smtpClient = new SmtpClient();
-            smtpClient.Credentials = new System.Net.NetworkCredential("sender email address here", "sender email password here");
-            smtpClient.Send(mail);
+            var smtp = new SmtpClient
+            {
+                Host = "smtp.gmail.com",
+                Port = 587,
+                EnableSsl = true,
+                DeliveryMethod = SmtpDeliveryMethod.Network,
+                UseDefaultCredentials = false,
+                Credentials = new System.Net.NetworkCredential("tfkt5melodiemaker@gmail.com", "pieceofcake")
+            };
+            smtp.Send(mail);
 
         }
 
-        private string GenerateEmailBody(Boolean isGenerated, Users user)
+        private string GenerateEmailBody(string password, Users user)
         {
             string message = "";
-            if (isGenerated)
-            {
-                message =
+            message =
                     "Hi, " + user.username + "!" + Environment.NewLine +
                     Environment.NewLine +
                     "You have been registered for Mèlodie Maker!  Please use the following to login:" + Environment.NewLine +
                     "Your new username is " + user.username + "." + Environment.NewLine +
-                    "Your new password is " + GenerateRandomPassword(8) + "." + Environment.NewLine +
+                    "Your new password is " + password + "." + Environment.NewLine +
                     "You can change your password in Settings." + Environment.NewLine +
                     Environment.NewLine +
                     "This is a no-reply email.  For general inquiries, please send an email to " + "our email here" + ".";
-
-            }
-            else
-            {
-                message =
-                    "Hi, " + user.username + "!" + Environment.NewLine +
-                    Environment.NewLine +
-                    "Your registration for Mèlodie Maker has been succesful.  Thank you!" + Environment.NewLine +
-                    Environment.NewLine +
-                    "This is a no-reply email.  For general inquiries, please send an email to " + "our email here" + ".";
-            }
             return message;
         }
 
@@ -257,5 +257,6 @@ namespace Mélodie.Controllers
 
             return password.ToString();
         }
+
     }
 }

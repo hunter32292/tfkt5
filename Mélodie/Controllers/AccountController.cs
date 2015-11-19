@@ -9,6 +9,7 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.Owin.Security;
 using Mélodie.Models;
+using System.Net.Mail;
 
 namespace Mélodie.Controllers
 {
@@ -90,6 +91,7 @@ namespace Mélodie.Controllers
                 if (result.Succeeded && model.Email.Contains("@uwec.edu"))
                 {
                     await SignInAsync(user, isPersistent: false);
+                    sendMailToRecipient(user, false);
                     return RedirectToAction("Index", "Home");
                 }
                 else if (!model.Email.Contains("@uwec.edu"))
@@ -134,7 +136,7 @@ namespace Mélodie.Controllers
             ViewBag.MessageId = Message;
             return View(model);
         }
-        [HttpPost]
+        [HttpPost]  
         [Authorize(Roles = "Instructor")]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Edit(EditUserViewModel model)
@@ -451,6 +453,73 @@ namespace Mélodie.Controllers
                 context.HttpContext.GetOwinContext().Authentication.Challenge(properties, LoginProvider);
             }
         }
+
+        // Sender email is hard coded in for now
+        //  address:    tfkt5melodiemaker@gmail.com
+        //  password:   pieceofcake
+        private void sendMailToRecipient(ApplicationUser user, Boolean passwordChanged)
+        {
+            // create the message that is to be mailed
+            MailMessage mail = new MailMessage();
+
+            // TODO - add proper address for email here
+            mail.From = new MailAddress("tfkt5melodiemaker@gmail.com");
+            mail.To.Add(new MailAddress(user.Email));
+
+            if (passwordChanged)
+            {
+                mail.Subject = "Your password for Melodie Maker has changed!";
+            }
+            else
+            {
+                mail.Subject = "Thank you for your registration to Mèlodie Maker!";
+            }
+
+            // generate the body of the email
+            string body = GenerateEmailBody(passwordChanged, user);
+
+            mail.Body = body;
+
+            var smtp = new SmtpClient
+            {
+                Host = "smtp.gmail.com",
+                Port = 587,
+                EnableSsl = true,
+                DeliveryMethod = SmtpDeliveryMethod.Network,
+                UseDefaultCredentials = false,
+                Credentials = new System.Net.NetworkCredential("tfkt5melodiemaker@gmail.com", "pieceofcake")
+            };
+            smtp.Send(mail);
+
+        }
+
+        private string GenerateEmailBody(Boolean passwordChanged, ApplicationUser user)
+        {
+            string message = "";
+            if (passwordChanged)
+            {
+                message =
+                    "Hi, " + user.UserName + "!" + Environment.NewLine +
+                    Environment.NewLine +
+                    "Your password for Melodie Maker has been successfully changed!" + Environment.NewLine +
+                    "Use the following credentials to log in: " + Environment.NewLine +
+                    "\tUsername:\t" + user.UserName + Environment.NewLine +
+                    "\tPassword:\t" + user.PasswordHash + Environment.NewLine +
+                    Environment.NewLine +
+                    "This is a no-reply email.  For general inquiries, please send an email to " + "our email here" + ".";
+            }
+            else
+            {
+                message =
+                    "Hi, " + user.UserName + "!" + Environment.NewLine +
+                    Environment.NewLine +
+                    "Your registration for Mèlodie Maker has been succesful.  Thank you!" + Environment.NewLine +
+                    Environment.NewLine +
+                    "This is a no-reply email.  For general inquiries, please send an email to " + "our email here" + ".";
+            }
+            return message;
+        }
+
         #endregion
     }
 }
