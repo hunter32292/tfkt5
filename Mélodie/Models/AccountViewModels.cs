@@ -59,6 +59,10 @@ namespace Mélodie.Models
         [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; }
 
+        [DataType(DataType.Text)]
+        [Display(Name = "Roles")]
+        public string role_id { get; set; }
+
         public ApplicationUser GetUser()
         {
             var user = new ApplicationUser()

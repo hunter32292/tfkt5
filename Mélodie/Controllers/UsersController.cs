@@ -94,7 +94,7 @@ namespace Mélodie.Controllers
             {
                 Users user = new Users();
                 user.email = (String)newUsers[x];
-                user.role_id = 1;
+                user.role_id = "Student";
                 // generate a random password for the user
                 string password = GenerateRandomPassword(8);
                 user.password_hash = password;
