@@ -86,7 +86,9 @@ namespace Mélodie.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser() { UserName = model.UserName, Email = model.Email };
+                MélodieContext db = new MélodieContext();
+                
+                var user = new ApplicationUser() { UserName = model.UserName, Email = model.Email, Role_id = model.role_id};
                 var result = await UserManager.CreateAsync(user, model.Password);
                 //var role = new IdentityManager();
                 //role.AddUserToRole(user.Id, model.role_id);

@@ -11,6 +11,7 @@ namespace Mélodie.Models
     public class ApplicationUser : IdentityUser
     {
         public string Email { get; set; }
+        public string Role_id { get; set; }
     }
 
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
@@ -61,6 +62,7 @@ namespace Mélodie.Models
 
             // Add this, so that IdentityRole can share a table with ApplicationRole:
             modelBuilder.Entity<IdentityRole>().ToTable("AspNetRoles");
+            modelBuilder.Entity<ApplicationRole>().ToTable("AspNetRoles");
 
             // Change these from IdentityRole to ApplicationRole:
             EntityTypeConfiguration<ApplicationRole> entityTypeConfiguration1 =

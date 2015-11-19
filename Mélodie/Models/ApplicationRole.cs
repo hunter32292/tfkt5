@@ -20,9 +20,9 @@ namespace Mélodie.Models
     public class ApplicationRole : IdentityRole
     {
         public ApplicationRole() : base() { }
-        public ApplicationRole(string name, string description) : base(name)
+        public ApplicationRole(string Id, string description) : base(Id)
         {
-            this.Description = description;
+            this.Name = Name;
         }
         public virtual string Description { get; set; }
     }
