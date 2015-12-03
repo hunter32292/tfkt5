@@ -97,8 +97,6 @@ namespace Mélodie.Controllers
                 user.role_id = "Student";
                 // generate a random password for the user
                 string password = GenerateRandomPassword(8);
-                user.password_hash = password;
-                user.password_salt = password;
                 // notify the user that an account has been created in their name
                 sendMailToRecipient(user, password);
                 db.Users.Add(user);
@@ -150,7 +148,7 @@ namespace Mélodie.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit([Bind(Include = "ID,username,email,password_salt,password_hash,role_id")] Users users)
+        public async Task<ActionResult> Edit([Bind(Include = "ID,username,email,role_id")] Users users)
         {
             if (ModelState.IsValid)
             {

@@ -1,12 +1,15 @@
-﻿
+﻿@using Mélodie.Controllers;
+@using Mélodie.Models;
+@using Microsoft.AspNet.Identity;
 @if (Request.IsAuthenticated)
 {
-    //Session["Instructor"] = Model.ID;
-    //var manager = new UserManager<User>(new UserStore<User>(new MélodieContext()));
- 
-<li class="bold">@Html.ActionLink("Students", "Index", "Users", null, new { @class = "black-text waves-effect waves-indigo" })</li>
-    
 
+    if(Session["Role"] != null && Session["Role"].Equals( "Instructor") )
+    {
+
+        <li class="bold">@Html.ActionLink("Students", "Index", "Users", null, new { @class = "black-text waves-effect waves-indigo" })</li>
+
+    }
     using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
     {
                     @Html.AntiForgeryToken()
@@ -21,6 +24,7 @@
 }
 else
 {
+
     <ul class="nav navbar-nav navbar-right">
         <li class="bold">@Html.ActionLink("Register", "Register", "Account", routeValues: null, htmlAttributes: new { id = "registerLink" , @class = "black-text waves-effect waves-indigo" })</li>
         <li class="bold">@Html.ActionLink("Log in", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" , @class = "black-text waves-effect waves-indigo" })</li>

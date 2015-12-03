@@ -55,6 +55,7 @@ namespace Mélodie.Controllers
                 if (user != null)
                 {
                     await SignInAsync(user, model.RememberMe);
+                    Session["Role"] = user.Role_id;
                     return RedirectToLocal(returnUrl);
                 }
                 else
