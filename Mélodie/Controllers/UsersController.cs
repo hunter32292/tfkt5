@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System;é
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
@@ -24,9 +24,17 @@ namespace Mélodie.Controllers
         // GET: /Users/
         public async Task<ActionResult> Index()
         {
-            return View(await db.Users.ToListAsync());
+            return View(await UserToListAsync());
         }
 
+        public async Task<Users> UserToListAsync()
+        {
+            MélodieContext mc = new MélodieContext();
+            var query = from u in mc.Users
+                        orderby u.username ascending
+                        select u;
+            return await query.ToListAsync();
+        }
         // GET: /Users/Details/5
         public async Task<ActionResult> Details(int? id)
         {
