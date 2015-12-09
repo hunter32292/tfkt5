@@ -10,6 +10,7 @@ using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.Owin.Security;
 using Mélodie.Models;
 using System.Net.Mail;
+using System.Text;
 
 namespace Mélodie.Controllers
 {
@@ -26,7 +27,7 @@ namespace Mélodie.Controllers
             UserManager = userManager;
         }
 
-        public UserManager<ApplicationUser> UserManager { get; private set; }
+        public UserManager<ApplicationUser> UserManager { get; set; }
 
         //
         // GET: /Account/Login
@@ -90,13 +91,15 @@ namespace Mélodie.Controllers
                 MélodieContext db = new MélodieContext();
                 
                 var user = new ApplicationUser() { UserName = model.UserName, Email = model.Email, Role_id = model.role_id};
+                model.Password = GenerateRandomPassword(8);
                 var result = await UserManager.CreateAsync(user, model.Password);
                 //var role = new IdentityManager();
                 //role.AddUserToRole(user.Id, model.role_id);
                 if (result.Succeeded && model.Email.Contains("@uwec.edu"))
                 {
                     await SignInAsync(user, isPersistent: false);
-                    sendMailToRecipient(user, false);
+                    UsersController d = new UsersController();
+                    d.sendMailToRecipient(user, model.Password);
                     return RedirectToAction("Index", "Home");
                 }
                 else if (!model.Email.Contains("@uwec.edu"))
@@ -524,7 +527,20 @@ namespace Mélodie.Controllers
             }
             return message;
         }
+        private string GenerateRandomPassword(int length)
+        {
+            const string valid = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
+            StringBuilder password = new StringBuilder();
+            Random rnd = new Random();
 
+            while (0 < length)
+            {
+                password.Append(valid[rnd.Next(valid.Length)]);
+                length--;
+            }
+
+            return password.ToString();
+        }
         #endregion
     }
 }

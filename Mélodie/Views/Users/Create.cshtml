@@ -1,4 +1,4 @@
-﻿@model Mélodie.Models.Users
+﻿@model Mélodie.Models.RegisterViewModel
 
 @{
     ViewBag.Title = "Create";
@@ -19,18 +19,18 @@
                 @Html.ValidationSummary(true)
 
                 <div class="form-group">
-                    @Html.LabelFor(model => model.username, new { @class = "control-label col-md-2" })
+                    @Html.LabelFor(model => model.UserName, new { @class = "control-label col-md-2" })
                     <div class="col-md-10">
-                        @Html.EditorFor(model => model.username)
-                        @Html.ValidationMessageFor(model => model.username)
+                        @Html.EditorFor(model => model.UserName)
+                        @Html.ValidationMessageFor(model => model.UserName)
                     </div>
                 </div>
 
                 <div class="form-group">
-                    @Html.LabelFor(model => model.email, new { @class = "control-label col-md-2" })
+                    @Html.LabelFor(model => model.Email, new { @class = "control-label col-md-2" })
                     <div class="col-md-10">
-                        @Html.EditorFor(model => model.email)
-                        @Html.ValidationMessageFor(model => model.email)
+                        @Html.EditorFor(model => model.Email)
+                        @Html.ValidationMessageFor(model => model.Email)
                     </div>
                 </div>
 

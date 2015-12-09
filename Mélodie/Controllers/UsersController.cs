@@ -1,4 +1,4 @@
-﻿using System;é
+﻿using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
@@ -14,6 +14,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using Excel;
 using System.IO;
+using Microsoft.AspNet.Identity;
 
 namespace Mélodie.Controllers
 {
@@ -27,7 +28,7 @@ namespace Mélodie.Controllers
             return View(await UserToListAsync());
         }
 
-        public async Task<Users> UserToListAsync()
+        public async Task<List<Users>> UserToListAsync()
         {
             MélodieContext mc = new MélodieContext();
             var query = from u in mc.Users
@@ -36,9 +37,9 @@ namespace Mélodie.Controllers
             return await query.ToListAsync();
         }
         // GET: /Users/Details/5
-        public async Task<ActionResult> Details(int? id)
+        public async Task<ActionResult> Details(string id)
         {
-            if (id == null)
+            if (string.IsNullOrEmpty(id))
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
@@ -59,12 +60,12 @@ namespace Mélodie.Controllers
         // Dylan added this
         // "Good work" - John
         [HttpPost]
-        public ActionResult Import()
+        public async Task<ActionResult> Import()
         {
-            
-		    ArrayList newUsers = new ArrayList();
+
+            ArrayList newUsers = new ArrayList();
             //newUsers.Add("hello");
-		    // Filter Regex
+            // Filter Regex
             string regex = "^[a-z,A-Z,0-9]*@uwec.edu$";
             Regex r = new Regex(regex);
             if (Request.Files.Count > 0)
@@ -94,28 +95,31 @@ namespace Mélodie.Controllers
                             }
                         }
                     }
-                    
+
                 }
             }
-            
+
             for (int x = 0; x < newUsers.Count; x++)
             {
                 Users user = new Users();
+
                 user.email = (String)newUsers[x];
                 user.role_id = "Student";
                 // generate a random password for the user
+                AccountController ac = new AccountController();
                 string password = GenerateRandomPassword(8);
+                RegisterViewModel model = new RegisterViewModel();
+                model.UserName = user.email.Substring(0, user.email.IndexOf('@'));
+                model.Email = user.email;
+                model.role_id = user.role_id;
                 // notify the user that an account has been created in their name
-                sendMailToRecipient(user, password);
-                db.Users.Add(user);
-                db.SaveChanges();
-
+                await ac.Register(model);
             }
 
             //stuff to make the computer stop yelling at me
-            
+
             return RedirectToAction("Index");
-            
+
         }
 
 
@@ -124,10 +128,11 @@ namespace Mélodie.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create([Bind(Include = "ID,username,email,role_id")] Users users)
+        public async Task<ActionResult> Create([Bind(Include = "ID,username,email,role_id")] Users users, RegisterViewModel model)
         {
             if (ModelState.IsValid)
             {
+
                 db.Users.Add(users);
                 await db.SaveChangesAsync();
                 return RedirectToAction("Index");
@@ -137,7 +142,7 @@ namespace Mélodie.Controllers
         }
 
         // GET: /Users/Edit/5
-        public async Task<ActionResult> Edit(int? id)
+        public async Task<ActionResult> Edit(string id)
         {
             if (id == null)
             {
@@ -168,7 +173,7 @@ namespace Mélodie.Controllers
         }
 
         // GET: /Users/Delete/5
-        public async Task<ActionResult> Delete(int? id)
+        public async Task<ActionResult> Delete(string id)
         {
             if (id == null)
             {
@@ -185,7 +190,7 @@ namespace Mélodie.Controllers
         // POST: /Users/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> DeleteConfirmed(int id)
+        public async Task<ActionResult> DeleteConfirmed(string id)
         {
             Users users = await db.Users.FindAsync(id);
             db.Users.Remove(users);
@@ -205,14 +210,14 @@ namespace Mélodie.Controllers
         // Sender email is hard coded in for now
         //  address:    tfkt5melodiemaker@gmail.com
         //  password:   pieceofcake
-        private void sendMailToRecipient(Users user, string password)
+        public void sendMailToRecipient(ApplicationUser user, string password)
         {
             // create the message that is to be mailed
             MailMessage mail = new MailMessage();
 
             // TODO - add proper address for email here
             mail.From = new MailAddress("tfkt5melodiemaker@gmail.com");
-            mail.To.Add(new MailAddress(user.email));
+            mail.To.Add(new MailAddress(user.Email));
 
             mail.Subject = "You have been registered for Mèlodie Maker!";
 
@@ -234,14 +239,14 @@ namespace Mélodie.Controllers
 
         }
 
-        private string GenerateEmailBody(string password, Users user)
+        private string GenerateEmailBody(string password, ApplicationUser user)
         {
             string message = "";
             message =
-                    "Hi, " + user.username + "!" + Environment.NewLine +
+                    "Hi, " + user.UserName + "!" + Environment.NewLine +
                     Environment.NewLine +
                     "You have been registered for Mèlodie Maker!  Please use the following to login:" + Environment.NewLine +
-                    "Your new username is " + user.username + "." + Environment.NewLine +
+                    "Your new username is " + user.UserName + "." + Environment.NewLine +
                     "Your new password is " + password + "." + Environment.NewLine +
                     "You can change your password in Settings." + Environment.NewLine +
                     Environment.NewLine +
