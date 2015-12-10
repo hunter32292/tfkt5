@@ -57,7 +57,16 @@ namespace Mélodie.Controllers
                 {
                     await SignInAsync(user, model.RememberMe);
                     Session["Role"] = user.Role_id;
-                    return RedirectToLocal(returnUrl);
+                    if (user.firstLogin)
+                    {
+                        Console.WriteLine("is getting here");
+                        returnUrl = Url.Action("Manage");
+                    }
+                    
+                    
+                        return RedirectToLocal(returnUrl);
+                    
+                    
                 }
                 else
                 {
@@ -89,18 +98,18 @@ namespace Mélodie.Controllers
             if (ModelState.IsValid)
             {
                 MélodieContext db = new MélodieContext();
-                
-                var user = new ApplicationUser() { UserName = model.UserName, Email = model.Email, Role_id = model.role_id};
+                model.firstLogin = true;
+                var user = new ApplicationUser() { UserName = model.UserName, Email = model.Email, Role_id = model.role_id, firstLogin = model.firstLogin };
                 model.Password = GenerateRandomPassword(8);
+                
                 var result = await UserManager.CreateAsync(user, model.Password);
                 //var role = new IdentityManager();
                 //role.AddUserToRole(user.Id, model.role_id);
                 if (result.Succeeded && model.Email.Contains("@uwec.edu"))
                 {
-                    await SignInAsync(user, isPersistent: false);
                     UsersController d = new UsersController();
                     d.sendMailToRecipient(user, model.Password);
-                    return RedirectToAction("Index", "Home");
+                    return RedirectToAction("Register", "Account");
                 }
                 else if (!model.Email.Contains("@uwec.edu"))
                 {
@@ -219,6 +228,9 @@ namespace Mélodie.Controllers
                     IdentityResult result = await UserManager.ChangePasswordAsync(User.Identity.GetUserId(), model.OldPassword, model.NewPassword);
                     if (result.Succeeded)
                     {
+                        var user = await UserManager.FindByIdAsync(User.Identity.GetUserId());
+                        user.firstLogin = false;
+                        await UserManager.UpdateAsync(user);
                         return RedirectToAction("Manage", new { Message = ManageMessageId.ChangePasswordSuccess });
                     }
                     else

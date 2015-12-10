@@ -11,5 +11,6 @@ namespace Mélodie.Models
         public string username { get; set; }
         public string email { get; set; }
         public string role_id { get; set; }
+        public bool firstLogin { get; set; }
     }
 }

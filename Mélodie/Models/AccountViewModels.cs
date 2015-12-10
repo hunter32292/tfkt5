@@ -60,6 +60,8 @@ namespace Mélodie.Models
         [Display(Name = "Roles")]
         public string role_id { get; set; }
 
+        public bool firstLogin { get; set; }
+
         public ApplicationUser GetUser()
         {
             var user = new ApplicationUser()

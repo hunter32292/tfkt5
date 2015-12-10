@@ -12,6 +12,7 @@ namespace Mélodie.Models
     {
         public string Email { get; set; }
         public string Role_id { get; set; }
+        public bool firstLogin { get; set; }
     }
 
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
