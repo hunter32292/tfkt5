@@ -1,60 +1,67 @@
 ﻿@model Mélodie.Models.Users
 
 @{
-    ViewBag.Title = "Edit";
+    ViewBag.Title = "Edit User";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Edit</h2>
 
 
-@using (Html.BeginForm())
-{
-    @Html.AntiForgeryToken()
-    
-    <div class="form-horizontal">
-        <h4>Users</h4>
-        <hr />
-        @Html.ValidationSummary(true)
-        @Html.HiddenFor(model => model.ID)
+<div class="container">
+    <div class="row">
+        <h2>@ViewBag.Title</h2>
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.username, new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.username)
-                @Html.ValidationMessageFor(model => model.username)
+            <div class="form-horizontal">
+                <hr />
+                @Html.ValidationSummary(true)
+                @Html.HiddenFor(model => model.ID)
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.username, "Username:", new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.username)
+                        @Html.ValidationMessageFor(model => model.username)
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.email, "Email:", new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.email)
+                        @Html.ValidationMessageFor(model => model.email)
+                    </div>
+                </div>
+
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.role_id, "Role:", new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.RadioButtonFor(m => m.role_id, "Instructor", new { id = "Instructor" })
+                        @Html.Label("Instructor", "Instructor")
+                        <br />
+                        @Html.RadioButtonFor(m => m.role_id, "Student", new { id = "Student" })
+                        @Html.Label("Student", "Student")
+                        @Html.ValidationMessageFor(model => model.role_id)
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-md-10">
+                        <input type="submit" value="Save" class="btn btn-default" />
+                    </div>
+                </div>
             </div>
-        </div>
+        }
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.email, new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.email)
-                @Html.ValidationMessageFor(model => model.email)
-            </div>
-        </div>
-
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.role_id, new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.role_id)
-                @Html.ValidationMessageFor(model => model.role_id)
-            </div>
-        </div>
-
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Save" class="btn btn-default" />
-            </div>
+        <div>
+            @Html.ActionLink("Back to List", "Index")
         </div>
     </div>
-}
-
-<div>
-    @Html.ActionLink("Back to List", "Index")
 </div>
 
-@section Scripts {
-    @Scripts.Render("~/bundles/jqueryval")
-}
+        @section Scripts {
+            @Scripts.Render("~/bundles/jqueryval")
+        }

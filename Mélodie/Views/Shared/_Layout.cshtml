@@ -12,7 +12,7 @@
 <body>
     <header>
 
-        <nav>
+        <nav id="nav-mobile hide-on-small-only">
             <div class="nav-wrapper yellow accent-1">
                 <center><img src="~/image/melodie.gif" class="center-align" /></center>
             </div>
@@ -40,6 +40,18 @@
     <main>
         <div class="container">
             <div class="row">
+                
+                @if ((Request.Params["Message"] == null))
+                {
+
+                }
+                else
+                {
+                    <br />
+                    <div class="card-panel blue-grey lighten-5">
+                        <center><p class="red-text text-darken-4"><b>@Request.Params["Message"]</b></p></center>
+                    </div>
+                }
                 @RenderBody()
             </div>
         </div>

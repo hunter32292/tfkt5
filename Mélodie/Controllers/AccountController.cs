@@ -231,7 +231,7 @@ namespace Mélodie.Controllers
                         var user = await UserManager.FindByIdAsync(User.Identity.GetUserId());
                         user.firstLogin = false;
                         await UserManager.UpdateAsync(user);
-                        return RedirectToAction("Manage", new { Message = ManageMessageId.ChangePasswordSuccess });
+                        return RedirectToAction("Index", "Home", new { Message = "Your password has been changed." });
                     }
                     else
                     {
