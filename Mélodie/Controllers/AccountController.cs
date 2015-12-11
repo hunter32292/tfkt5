@@ -50,23 +50,23 @@ namespace Mélodie.Controllers
                 if (model.UserName.Contains("@uwec.edu"))
                 {
                     //Take the user to their account modifying page.
-                    
+
                 }
                 var user = await UserManager.FindAsync(model.UserName, model.Password);
                 if (user != null)
                 {
                     await SignInAsync(user, model.RememberMe);
+                    // Storing role is a session variable
                     Session["Role"] = user.Role_id;
                     if (user.firstLogin)
                     {
                         Console.WriteLine("is getting here");
-                        returnUrl = Url.Action("Manage");
+                        // Should return to main screen
+                        returnUrl = Url.Action("Index","Home", new { Message = "You have logged in to the application" });
                     }
-                    
-                    
+
                         return RedirectToLocal(returnUrl);
-                    
-                    
+
                 }
                 else
                 {
@@ -101,7 +101,7 @@ namespace Mélodie.Controllers
                 model.firstLogin = true;
                 var user = new ApplicationUser() { UserName = model.UserName, Email = model.Email, Role_id = model.role_id, firstLogin = model.firstLogin };
                 model.Password = GenerateRandomPassword(8);
-                
+
                 var result = await UserManager.CreateAsync(user, model.Password);
                 //var role = new IdentityManager();
                 //role.AddUserToRole(user.Id, model.role_id);
@@ -153,7 +153,7 @@ namespace Mélodie.Controllers
             ViewBag.MessageId = Message;
             return View(model);
         }
-        [HttpPost]  
+        [HttpPost]
         [Authorize(Roles = "Instructor")]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Edit(EditUserViewModel model)
@@ -277,7 +277,7 @@ namespace Mélodie.Controllers
             return new ChallengeResult(provider, Url.Action("ExternalLoginCallback", "Account", new { ReturnUrl = returnUrl }));
         }
 
-       
+
 
         //
         // POST: /Account/LinkLogin
@@ -327,7 +327,7 @@ namespace Mélodie.Controllers
         public ActionResult LogOff()
         {
             AuthenticationManager.SignOut();
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Index", "Home", new { Message = "Successfully logged out of application" });
         }
 
         //

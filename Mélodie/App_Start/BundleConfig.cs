@@ -21,9 +21,11 @@ namespace Mélodie
 
             bundles.Add(new ScriptBundle("~/bundles/materialize").Include(
                       "~/js/init.js",
+                      "~/js/piano.js",
                       "~/js/materialize.js"));
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
+                      "~/css/piano.css",
                       "~/css/materialize.css",
                       "~/css/site.css"));
         }
