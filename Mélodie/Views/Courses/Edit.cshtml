@@ -6,7 +6,7 @@
 }
 <div class="container">
     <div class="row">
-    <h2>Edit</h2>
+    <h2>@Server.HtmlEncode(Request.Cookies["Role"].Value)</h2>
 
     @using (Html.BeginForm())
     {

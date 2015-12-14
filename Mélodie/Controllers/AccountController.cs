@@ -86,6 +86,11 @@ namespace Mélodie.Controllers
         [Authorize]
         public ActionResult Register()
         {
+            // Auth function
+            if (Request.Cookies["Role"] != null && !Server.HtmlEncode(Request.Cookies["Role"].Value).Equals("Instructor"))
+            {
+                return RedirectToAction("Index");
+            }
             return View();
         }
 
@@ -96,6 +101,11 @@ namespace Mélodie.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Register(RegisterViewModel model)
         {
+            // Auth function
+            if (Request.Cookies["Role"] != null && !Server.HtmlEncode(Request.Cookies["Role"].Value).Equals("Instructor"))
+            {
+                return RedirectToAction("Index");
+            }
             if (ModelState.IsValid)
             {
                 MélodieContext db = new MélodieContext();
@@ -145,7 +155,6 @@ namespace Mélodie.Controllers
             return RedirectToAction("Manage", new { Message = message });
         }
 
-        [Authorize(Roles = "Instructor")]
         public ActionResult Edit(string id, ManageMessageId? Message = null)
         {
             var Db = new ApplicationDbContext();
@@ -155,7 +164,6 @@ namespace Mélodie.Controllers
             return View(model);
         }
         [HttpPost]
-        [Authorize(Roles = "Instructor")]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Edit(EditUserViewModel model)
         {
@@ -187,9 +195,13 @@ namespace Mélodie.Controllers
             return View();
         }
 
-        [Authorize(Roles = "Instructor")]
         public ActionResult Delete(string id = null)
         {
+            // Auth function
+            if (Request.Cookies["Role"] != null && !Server.HtmlEncode(Request.Cookies["Role"].Value).Equals("Instructor"))
+            {
+                return RedirectToAction("Index");
+            }
             var Db = new ApplicationDbContext();
             var user = Db.Users.First(u => u.UserName == id);
             var model = new EditUserViewModel(user);
@@ -206,6 +218,11 @@ namespace Mélodie.Controllers
         [Authorize(Roles = "Instructor")]
         public ActionResult DeleteConfirmed(string id)
         {
+            // Auth function
+            if (Request.Cookies["Role"] != null && !Server.HtmlEncode(Request.Cookies["Role"].Value).Equals("Instructor"))
+            {
+                return RedirectToAction("Index");
+            }
             var Db = new ApplicationDbContext();
             var user = Db.Users.First(u => u.UserName == id);
             Db.Users.Remove(user);

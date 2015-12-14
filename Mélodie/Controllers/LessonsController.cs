@@ -42,6 +42,11 @@ namespace Mélodie.Controllers
         // GET: Lessons/Create
         public ActionResult Create()
         {
+            // Auth function
+            if (Request.Cookies["Role"] != null && !Server.HtmlEncode(Request.Cookies["Role"].Value).Equals("Instructor"))
+            {
+                return RedirectToAction("Index");
+            }
             return View();
         }
 
@@ -52,6 +57,11 @@ namespace Mélodie.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Create([Bind(Include = "ID,title,lesson_file_path")] Lessons lessons)
         {
+            // Auth function
+            if (Request.Cookies["Role"] != null && !Server.HtmlEncode(Request.Cookies["Role"].Value).Equals("Instructor"))
+            {
+                return RedirectToAction("Index");
+            }
             if (ModelState.IsValid)
             {
                 db.Lesson.Add(lessons);
@@ -65,6 +75,11 @@ namespace Mélodie.Controllers
         // GET: Lessons/Edit/5
         public async Task<ActionResult> Edit(int? id)
         {
+            // Auth function
+            if (Request.Cookies["Role"] != null && !Server.HtmlEncode(Request.Cookies["Role"].Value).Equals("Instructor"))
+            {
+                return RedirectToAction("Index");
+            }
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -84,6 +99,11 @@ namespace Mélodie.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Edit([Bind(Include = "ID,title,lesson_file_path")] Lessons lessons)
         {
+            // Auth function
+            if (Request.Cookies["Role"] != null && !Server.HtmlEncode(Request.Cookies["Role"].Value).Equals("Instructor"))
+            {
+                return RedirectToAction("Index");
+            }
             if (ModelState.IsValid)
             {
                 db.Entry(lessons).State = EntityState.Modified;
@@ -96,6 +116,11 @@ namespace Mélodie.Controllers
         // GET: Lessons/Delete/5
         public async Task<ActionResult> Delete(int? id)
         {
+            // Auth function
+            if (Request.Cookies["Role"] != null && !Server.HtmlEncode(Request.Cookies["Role"].Value).Equals("Instructor"))
+            {
+                return RedirectToAction("Index");
+            }
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -113,6 +138,11 @@ namespace Mélodie.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> DeleteConfirmed(int id)
         {
+            // Auth function
+            if (Request.Cookies["Role"] != null && !Server.HtmlEncode(Request.Cookies["Role"].Value).Equals("Instructor"))
+            {
+                return RedirectToAction("Index");
+            }
             Lessons lessons = await db.Lesson.FindAsync(id);
             db.Lesson.Remove(lessons);
             await db.SaveChangesAsync();

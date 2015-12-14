@@ -26,10 +26,10 @@
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.lesson_file_path, htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.course_id, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.lesson_file_path)
-                @Html.ValidationMessageFor(model => model.lesson_file_path)
+                @Html.EditorFor(model => model.course_id)
+                @Html.ValidationMessageFor(model => model.course_id)
             </div>
         </div>
 

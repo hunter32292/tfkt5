@@ -20,6 +20,7 @@ namespace Mélodie.Controllers
         // GET: Questions
         public async Task<ActionResult> Index()
         {
+            ViewBag.title = Request.Cookies["Role"].Value;
             return View(await db.Questions.ToListAsync());
         }
 
@@ -39,6 +40,7 @@ namespace Mélodie.Controllers
         }
 
         // GET: Questions/Create
+
         public ActionResult Create()
         {
             return View();
@@ -51,6 +53,7 @@ namespace Mélodie.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Create([Bind(Include = "ID,lesson_id,text,points,audioclip_path")] Questions questions)
         {
+
             if (ModelState.IsValid)
             {
                 db.Questions.Add(questions);
@@ -83,6 +86,7 @@ namespace Mélodie.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Edit([Bind(Include = "ID,lesson_id,text,points,audioclip_path")] Questions questions)
         {
+
             if (ModelState.IsValid)
             {
                 db.Entry(questions).State = EntityState.Modified;
@@ -95,6 +99,7 @@ namespace Mélodie.Controllers
         // GET: Questions/Delete/5
         public async Task<ActionResult> Delete(int? id)
         {
+
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -112,6 +117,7 @@ namespace Mélodie.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> DeleteConfirmed(int id)
         {
+
             Questions questions = await db.Questions.FindAsync(id);
             db.Questions.Remove(questions);
             await db.SaveChangesAsync();
