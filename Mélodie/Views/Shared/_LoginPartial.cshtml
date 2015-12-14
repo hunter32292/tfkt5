@@ -3,10 +3,9 @@
 @using Microsoft.AspNet.Identity;
 @if (Request.IsAuthenticated)
 {
-
-    if(Session["Role"] != null && Session["Role"].Equals( "Instructor") )
+    if (Request.Cookies["Role"] != null && Server.HtmlEncode(Request.Cookies["Role"].Value).Equals("Instructor"))
     {
-
+    
         <li class="bold">@Html.ActionLink("Students", "Index", "Users", null, new { @class = "black-text waves-effect waves-indigo" })</li>
         <li class="bold">@Html.ActionLink("Courses", "Index", "Courses", null, new { @class = "black-text waves-effect waves-indigo" })</li>
 
@@ -17,7 +16,7 @@
 
                     <ul class="nav navbar-nav navbar-right">
         <li>
-            @Html.ActionLink("Account", "Manage", "Account", routeValues: null, htmlAttributes: new { title = "Manage", @class = "black-text waves-effect waves-indigo" })
+            @Html.ActionLink("Account", "Manage", routeValues: null, htmlAttributes: new { @class = "black-text waves-effect waves-indigo" })
         </li>
         <li><a href="javascript:document.getElementById('logoutForm').submit()" class = "black-text waves-effect waves-indigo">Log off</a></li>
     </ul>

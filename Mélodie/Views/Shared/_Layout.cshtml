@@ -6,6 +6,13 @@
     <title>@ViewBag.Title - Mélodie</title>
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/materialize")
+    <script>
+        $(document).ready(function () {
+            $('select').material_select();
+        });
+    </script>
+    @RenderSection("scripts", required: false)
 
 
 </head>
@@ -89,7 +96,6 @@
 
 
     
-    @Scripts.Render("~/bundles/materialize")
-    @RenderSection("scripts", required: false)
+
 </body>
 </html>

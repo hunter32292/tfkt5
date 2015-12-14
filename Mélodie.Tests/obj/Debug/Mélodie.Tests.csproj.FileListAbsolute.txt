@@ -90,3 +90,4 @@ C:\Users\jorda\Documents\Homework\SE2\tfkt5\Mélodie.Tests\bin\Debug\Microsoft.O
 C:\Users\jorda\Documents\Homework\SE2\tfkt5\Mélodie.Tests\obj\Debug\Mélodie.Tests.csprojResolveAssemblyReference.cache
 C:\Users\jorda\Documents\Homework\SE2\tfkt5\Mélodie.Tests\obj\Debug\Mélodie.Tests.dll
 C:\Users\jorda\Documents\Homework\SE2\tfkt5\Mélodie.Tests\obj\Debug\Mélodie.Tests.pdb
+H:\Documents\CS485\tfkt5\Mélodie.Tests\bin\Debug\Mélodie.pdb

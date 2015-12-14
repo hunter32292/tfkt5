@@ -8,6 +8,7 @@ using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.Owin.Security;
+using Microsoft.Owin.Security.Cookies;
 using Mélodie.Models;
 using System.Net.Mail;
 using System.Text;
@@ -56,13 +57,15 @@ namespace Mélodie.Controllers
                 if (user != null)
                 {
                     await SignInAsync(user, model.RememberMe);
-                    // Storing role is a session variable
-                    Session["Role"] = user.Role_id;
+                    // TODO this is adding a new cookie to store the role of our user
+                    HttpCookie myCookie = new HttpCookie("Role");
+                    myCookie.Value = user.Role_id;
+                    myCookie.Expires = DateTime.Now.AddHours(1);
+                    Response.Cookies.Add(myCookie);
                     if (user.firstLogin)
                     {
-                        Console.WriteLine("is getting here");
-                        // Should return to main screen
-                        returnUrl = Url.Action("Index","Home", new { Message = "You have logged in to the application" });
+                      // Should return to main screen
+                        returnUrl = Url.Action("Manage", new { Message = "Please change your password" });
                     }
 
                         return RedirectToLocal(returnUrl);
@@ -109,7 +112,7 @@ namespace Mélodie.Controllers
                 {
                     UsersController d = new UsersController();
                     d.sendMailToRecipient(user, model.Password);
-                    return RedirectToAction("Register", "Account");
+                    return RedirectToAction("Login", new { Message = "Please use the password sent to your email to login to the application." });
                 }
                 else if (!model.Email.Contains("@uwec.edu"))
                 {

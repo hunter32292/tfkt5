@@ -20,6 +20,7 @@ namespace Mélodie.Controllers
         // GET: Courses
         public async Task<ActionResult> Index()
         {
+
             return View(await db.Course.ToListAsync());
         }
 
@@ -41,6 +42,13 @@ namespace Mélodie.Controllers
         // GET: Courses/Create
         public ActionResult Create()
         {
+            IEnumerable<SelectListItem> items = db.Users
+              .Select(c => new SelectListItem
+              {
+                  Value = c.ID,
+                  Text = c.username
+              });
+            ViewBag.user_id = items;
             return View();
         }
 

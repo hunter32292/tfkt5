@@ -20,6 +20,7 @@ namespace Mélodie.Controllers
         // GET: Lessons
         public async Task<ActionResult> Index()
         {
+
             return View(await db.Lesson.ToListAsync());
         }
 

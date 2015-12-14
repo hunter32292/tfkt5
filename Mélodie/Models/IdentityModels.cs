@@ -18,8 +18,8 @@ namespace Mélodie.Models
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
         public ApplicationDbContext()
-            //: base("DefaultConnection")
             : base("MélodieContext")
+            //: base("ODBC.melodie.melodie")
         {
         }
 

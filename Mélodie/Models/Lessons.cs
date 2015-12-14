@@ -9,7 +9,7 @@ namespace Mélodie.Models
     {
         public int ID { get; set; }
         public string title { get; set; }
-        public string lesson_file_path { get; set; }
+        public int course_id { get; set; }
 
     }
 }

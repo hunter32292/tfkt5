@@ -25,10 +25,12 @@
             </div>
 
             <div class="form-group">
-                @Html.LabelFor(model => model.user_id, htmlAttributes: new { @class = "control-label col-md-2" })
+                @Html.LabelFor(model => model.user_id,"Created By", htmlAttributes: new { @class = "control-label col-md-2" })
                 <div class="col-md-10">
-                    @Html.EditorFor(model => model.user_id)
-                    <!-- TODO add select list of teachers from users where role is Instructor-->
+                    @if (ViewBag.user_id != null)
+                    {
+                        @Html.DropDownList("user_id", (IEnumerable<SelectListItem>)ViewBag.Categories)
+                    }
                     @Html.ValidationMessageFor(model => model.user_id)
                 </div>
             </div>
