@@ -42,12 +42,18 @@ namespace Mélodie.Controllers
         // GET: Courses/Create
         public ActionResult Create()
         {
-            IEnumerable<SelectListItem> items = db.Users
-              .Select(c => new SelectListItem
-              {
-                  Value = c.ID,
-                  Text = c.username
-              });
+            List<SelectListItem> items = new List<SelectListItem>();
+            foreach (var item in db.Users.Where(a => a.role_id.Equals("Instructor")))
+            {
+                SelectListItem s = new SelectListItem
+                {
+                    Value = item.ID,
+                    Text = item.username
+                };
+
+                items.Add(s);
+
+            }
             ViewBag.user_id = items;
             return View();
         }
@@ -76,6 +82,18 @@ namespace Mélodie.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
+            List<SelectListItem> items = new List<SelectListItem>(); 
+            foreach (var item in db.Users.Where(a => a.role_id.Equals("Instructor")))
+            {
+               SelectListItem s = new SelectListItem{
+                    Value = item.ID,
+                    Text = item.username
+                };
+
+               items.Add(s);
+                
+            }
+            ViewBag.user_id = items;
             Courses courses = await db.Course.FindAsync(id);
             if (courses == null)
             {

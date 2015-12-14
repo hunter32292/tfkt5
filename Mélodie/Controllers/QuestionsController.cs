@@ -49,7 +49,7 @@ namespace Mélodie.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create([Bind(Include = "ID,lesson_id,text,points")] Questions questions)
+        public async Task<ActionResult> Create([Bind(Include = "ID,lesson_id,text,points,audioclip_path")] Questions questions)
         {
             if (ModelState.IsValid)
             {
@@ -81,7 +81,7 @@ namespace Mélodie.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit([Bind(Include = "ID,lesson_id,text,points")] Questions questions)
+        public async Task<ActionResult> Edit([Bind(Include = "ID,lesson_id,text,points,audioclip_path")] Questions questions)
         {
             if (ModelState.IsValid)
             {
