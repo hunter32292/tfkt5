@@ -7,7 +7,7 @@
 <div class="container">
     <div class="row">
         <h2>Index</h2>
-
+        
         <p>
             @Html.ActionLink("Create New", "Register", new { controller = "Account" }, new { @class = "btn" })
         </p>
@@ -47,10 +47,10 @@
         <table class="table">
             <tr>
                 <th>
-                    @Html.DisplayNameFor(model => model.username)
+                    Username
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.email)
+                    Email
                 </th>
                 <!--<th>
                     //Html.DisplayNameFor(model => model.password_salt)
@@ -59,7 +59,7 @@
                     //Html.DisplayNameFor(model => model.password_hash)
                 </th>-->
                 <th>
-                    @Html.DisplayNameFor(model => model.role_id)
+                    Role
                 </th>
                 <th></th>
             </tr>

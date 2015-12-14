@@ -11,6 +11,8 @@ using Mélodie.Models;
 
 namespace Mélodie.Controllers
 {
+    // Add login authorization
+    [Authorize]
     public class CoursesController : Controller
     {
         private MélodieContext db = new MélodieContext();
@@ -18,6 +20,7 @@ namespace Mélodie.Controllers
         // GET: Courses
         public async Task<ActionResult> Index()
         {
+
             return View(await db.Course.ToListAsync());
         }
 
@@ -39,11 +42,18 @@ namespace Mélodie.Controllers
         // GET: Courses/Create
         public ActionResult Create()
         {
+            IEnumerable<SelectListItem> items = db.Users
+              .Select(c => new SelectListItem
+              {
+                  Value = c.ID,
+                  Text = c.username
+              });
+            ViewBag.user_id = items;
             return View();
         }
 
         // POST: Courses/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -75,7 +85,7 @@ namespace Mélodie.Controllers
         }
 
         // POST: Courses/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]

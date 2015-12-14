@@ -8,6 +8,7 @@ using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.Owin.Security;
+using Microsoft.Owin.Security.Cookies;
 using Mélodie.Models;
 using System.Net.Mail;
 using System.Text;
@@ -50,23 +51,25 @@ namespace Mélodie.Controllers
                 if (model.UserName.Contains("@uwec.edu"))
                 {
                     //Take the user to their account modifying page.
-                    
+
                 }
                 var user = await UserManager.FindAsync(model.UserName, model.Password);
                 if (user != null)
                 {
                     await SignInAsync(user, model.RememberMe);
-                    Session["Role"] = user.Role_id;
+                    // TODO this is adding a new cookie to store the role of our user
+                    HttpCookie myCookie = new HttpCookie("Role");
+                    myCookie.Value = user.Role_id;
+                    myCookie.Expires = DateTime.Now.AddHours(1);
+                    Response.Cookies.Add(myCookie);
                     if (user.firstLogin)
                     {
-                        Console.WriteLine("is getting here");
-                        returnUrl = Url.Action("Manage");
+                      // Should return to main screen
+                        returnUrl = Url.Action("Manage", new { Message = "Please change your password" });
                     }
-                    
-                    
+
                         return RedirectToLocal(returnUrl);
-                    
-                    
+
                 }
                 else
                 {
@@ -101,7 +104,7 @@ namespace Mélodie.Controllers
                 model.firstLogin = true;
                 var user = new ApplicationUser() { UserName = model.UserName, Email = model.Email, Role_id = model.role_id, firstLogin = model.firstLogin };
                 model.Password = GenerateRandomPassword(8);
-                
+
                 var result = await UserManager.CreateAsync(user, model.Password);
                 //var role = new IdentityManager();
                 //role.AddUserToRole(user.Id, model.role_id);
@@ -109,7 +112,7 @@ namespace Mélodie.Controllers
                 {
                     UsersController d = new UsersController();
                     d.sendMailToRecipient(user, model.Password);
-                    return RedirectToAction("Register", "Account");
+                    return RedirectToAction("Login", new { Message = "Please use the password sent to your email to login to the application." });
                 }
                 else if (!model.Email.Contains("@uwec.edu"))
                 {
@@ -153,7 +156,7 @@ namespace Mélodie.Controllers
             ViewBag.MessageId = Message;
             return View(model);
         }
-        [HttpPost]  
+        [HttpPost]
         [Authorize(Roles = "Instructor")]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Edit(EditUserViewModel model)
@@ -231,7 +234,7 @@ namespace Mélodie.Controllers
                         var user = await UserManager.FindByIdAsync(User.Identity.GetUserId());
                         user.firstLogin = false;
                         await UserManager.UpdateAsync(user);
-                        return RedirectToAction("Manage", new { Message = ManageMessageId.ChangePasswordSuccess });
+                        return RedirectToAction("Index", "Home", new { Message = "Your password has been changed." });
                     }
                     else
                     {
@@ -277,7 +280,7 @@ namespace Mélodie.Controllers
             return new ChallengeResult(provider, Url.Action("ExternalLoginCallback", "Account", new { ReturnUrl = returnUrl }));
         }
 
-       
+
 
         //
         // POST: /Account/LinkLogin
@@ -327,7 +330,7 @@ namespace Mélodie.Controllers
         public ActionResult LogOff()
         {
             AuthenticationManager.SignOut();
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Index", "Home", new { Message = "Successfully logged out of application" });
         }
 
         //

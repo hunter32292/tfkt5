@@ -6,13 +6,20 @@
     <title>@ViewBag.Title - Mélodie</title>
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/materialize")
+    <script>
+        $(document).ready(function () {
+            $('select').material_select();
+        });
+    </script>
+    @RenderSection("scripts", required: false)
 
 
 </head>
 <body>
     <header>
 
-        <nav>
+        <nav id="nav-mobile hide-on-small-only">
             <div class="nav-wrapper yellow accent-1">
                 <center><img src="~/image/melodie.gif" class="center-align" /></center>
             </div>
@@ -40,6 +47,18 @@
     <main>
         <div class="container">
             <div class="row">
+                
+                @if ((Request.Params["Message"] == null))
+                {
+
+                }
+                else
+                {
+                    <br />
+                    <div class="card-panel blue-grey lighten-5">
+                        <center><p class="red-text text-darken-4"><b>@Request.Params["Message"]</b></p></center>
+                    </div>
+                }
                 @RenderBody()
             </div>
         </div>
@@ -77,7 +96,6 @@
 
 
     
-    @Scripts.Render("~/bundles/materialize")
-    @RenderSection("scripts", required: false)
+
 </body>
 </html>
