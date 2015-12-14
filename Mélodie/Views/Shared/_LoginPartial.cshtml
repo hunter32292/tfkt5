@@ -11,16 +11,12 @@
 
     }
     using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
-    {
-                    @Html.AntiForgeryToken()
-
-                    <ul class="nav navbar-nav navbar-right">
-        <li>
-            @Html.ActionLink("Manage", "Manage", "Account", null, new { @class = "black-text waves-effect waves-indigo" })
-        </li>
-        <li><a href="javascript:document.getElementById('logoutForm').submit()" class = "black-text waves-effect waves-indigo">Log off</a></li>
-    </ul>
-    }
+ {
+    @Html.AntiForgeryToken()
+        <li class="bold">@Html.ActionLink("Courses", "Index", "Courses", null, new { @class = "black-text waves-effect waves-indigo" })</li>
+        <li class ="bold">@Html.ActionLink("Manage", "Manage", "Account", null, new { @class = "black-text waves-effect waves-indigo" })</li>
+        <li class ="bold"><a href="javascript:document.getElementById('logoutForm').submit()" class="black-text waves-effect waves-indigo">Log off</a></li>
+ }
 }
 else
 {
