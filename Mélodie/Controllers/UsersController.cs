@@ -76,10 +76,10 @@ namespace Mélodie.Controllers
                 if (file != null && file.ContentLength > 0)
                 {
                     var fileName = Path.GetFileName(file.FileName);
-
-                    var path = Path.Combine("H:\\tfkt5\\Mélodie\\excel\\", fileName);//H:\tfkt5\Mélodie\excel\
+                    var path = Path.GetFullPath(Server.MapPath("~"));
+                    path = Path.Combine(path , fileName); //H:\tfkt5\Mélodie\excel\
                     file.SaveAs(path);
-                    foreach (var worksheet in Workbook.Worksheets("H:\\tfkt5\\Mélodie\\excel\\" + fileName))
+                    foreach (var worksheet in Workbook.Worksheets(path))
                     {
                         foreach (var row in worksheet.Rows)
                         {
