@@ -101,11 +101,6 @@ namespace Mélodie.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Register(RegisterViewModel model)
         {
-            // Auth function
-            if (Request.Cookies["Role"] != null && !Server.HtmlEncode(Request.Cookies["Role"].Value).Equals("Instructor"))
-            {
-                return RedirectToAction("Index");
-            }
             if (ModelState.IsValid)
             {
                 MélodieContext db = new MélodieContext();
