@@ -334,3 +334,7 @@ C:\Users\Barry\Documents\School Folder\Fall 2015\Software Engineering II\tfkt5\M
 C:\Users\Barry\Documents\School Folder\Fall 2015\Software Engineering II\tfkt5\Mélodie\bin\MySql.Data.dll
 C:\Users\Barry\Documents\School Folder\Fall 2015\Software Engineering II\tfkt5\Mélodie\bin\MySql.Data.Entity.EF6.dll
 C:\Users\Barry\Documents\School Folder\Fall 2015\Software Engineering II\tfkt5\Mélodie\obj\Debug\Mélodie.csprojResolveAssemblyReference.cache
+C:\Users\jorda\Documents\Homework\SE2\tfkt5\Mélodie\bin\Mélodie.dll.CodeAnalysisLog.xml
+C:\Users\jorda\Documents\Homework\SE2\tfkt5\Mélodie\bin\Mélodie.dll.lastcodeanalysissucceeded
+C:\Users\jorda\Documents\Homework\SE2\tfkt5\Mélodie\bin\MySql.Data.dll
+C:\Users\jorda\Documents\Homework\SE2\tfkt5\Mélodie\bin\MySql.Data.Entity.EF6.dll
