@@ -244,6 +244,8 @@ namespace Mélodie.Controllers
                         var user = await UserManager.FindByIdAsync(User.Identity.GetUserId());
                         user.firstLogin = false;
                         await UserManager.UpdateAsync(user);
+                        // send user email upon password change
+                        //sendMailToRecipient(user, true);
                         return RedirectToAction("Index", "Home", new { Message = "Your password has been changed." });
                     }
                     else
@@ -539,7 +541,7 @@ namespace Mélodie.Controllers
                     "\tUsername:\t" + user.UserName + Environment.NewLine +
                     "\tPassword:\t" + user.PasswordHash + Environment.NewLine +
                     Environment.NewLine +
-                    "This is a no-reply email.  For general inquiries, please send an email to " + "our email here" + ".";
+                    "This is a no-reply email.  For general inquiries, please send an email to " + "musicandtheatre@uwec.edu" + ".";
             }
             else
             {
@@ -548,7 +550,7 @@ namespace Mélodie.Controllers
                     Environment.NewLine +
                     "Your registration for Mèlodie Maker has been succesful.  Thank you!" + Environment.NewLine +
                     Environment.NewLine +
-                    "This is a no-reply email.  For general inquiries, please send an email to " + "our email here" + ".";
+                    "This is a no-reply email.  For general inquiries, please send an email to " + "musicandtheatre@uwec.edu" + ".";
             }
             return message;
         }

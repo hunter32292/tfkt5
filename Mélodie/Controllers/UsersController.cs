@@ -252,7 +252,7 @@ namespace Mélodie.Controllers
                     "Your new password is " + password + "." + Environment.NewLine +
                     "You can change your password in Settings." + Environment.NewLine +
                     Environment.NewLine +
-                    "This is a no-reply email.  For general inquiries, please send an email to " + "our email here" + ".";
+                    "This is a no-reply email.  For general inquiries, please send an email to musicandtheatre@uwec.edu.";
             return message;
         }
 
